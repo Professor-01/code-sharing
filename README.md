@@ -16,12 +16,14 @@ A modern code sharing platform built with React and Node.js that allows users to
 ### Frontend
 
 1. Install dependencies:
+
 ```bash
 cd client
 npm install
 ```
 
 2. Start development server:
+
 ```bash
 npm start
 ```
@@ -29,12 +31,14 @@ npm start
 ### Backend
 
 1. Install dependencies:
+
 ```bash
 cd server
 npm install
 ```
 
 2. Start server:
+
 ```bash
 node server.js
 ```

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
-import { 
-  docco, 
+import {
+  docco,
   atomOneDark,
-  githubGist
+  githubGist,
 } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import "./index.css";
 
-import AdminPanel from './AdminPanel';
+import AdminPanel from "./AdminPanel";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -69,18 +69,18 @@ function PasteViewSplit() {
     setViewError(null);
     setViewSnippets([]);
     setSelectedSnippet(null);
-    
+
     if (!viewName) {
       setViewError("Please enter a name.");
       return;
     }
-    
+
     const res = await fetch(`${API_URL}/api/view`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name: viewName }),
     });
-    
+
     if (res.ok) {
       const data = await res.json();
       setViewSnippets(data.snippets);
@@ -115,6 +115,7 @@ function PasteViewSplit() {
 
   return (
     <div
+      className="main-split"
       style={{
         height: "100vh",
         width: "100vw",
@@ -136,6 +137,7 @@ function PasteViewSplit() {
           minWidth: 0,
           padding: "20px",
           height: "100%",
+          overflowY: "auto",
         }}
       >
         <div
@@ -143,7 +145,7 @@ function PasteViewSplit() {
             background: "rgba(255, 255, 255, 0.98)",
             borderRadius: 20,
             boxShadow: "0 10px 40px rgba(0,0,0,0.08)",
-            padding: 44,
+            padding: "clamp(20px, 5vw, 44px)",
             width: "100%",
             maxWidth: "800px",
             display: "flex",
@@ -154,9 +156,9 @@ function PasteViewSplit() {
             style={{
               textAlign: "center",
               color: "#1a202c",
-              marginBottom: 32,
+              marginBottom: "clamp(20px, 4vw, 32px)",
               fontWeight: 700,
-              fontSize: 30,
+              fontSize: "clamp(20px, 4vw, 30px)",
               letterSpacing: "-0.5px",
             }}
           >
@@ -196,7 +198,10 @@ function PasteViewSplit() {
               }}
             />
 
-            <div style={{ display: "flex", gap: "12px", marginBottom: 24 }}>
+            <div
+              className="language-selector"
+              style={{ display: "flex", gap: "12px", marginBottom: 24 }}
+            >
               <div style={{ flex: 1 }}>
                 <label
                   style={{
@@ -282,6 +287,7 @@ function PasteViewSplit() {
               Code
             </label>
             <textarea
+              className="code-input"
               placeholder="Paste your code here"
               value={code}
               onChange={(e) => setCode(e.target.value)}
@@ -290,7 +296,7 @@ function PasteViewSplit() {
                 padding: "16px",
                 borderRadius: 12,
                 border: "1px solid #e2e8f0",
-                fontSize: 15,
+                fontSize: "clamp(14px, 2vw, 15px)",
                 fontFamily: "Fira Mono, monospace",
                 marginBottom: 28,
                 background: "#f8fafc",
@@ -298,7 +304,7 @@ function PasteViewSplit() {
                 outline: "none",
                 boxSizing: "border-box",
                 flex: 1,
-                minHeight: "300px",
+                minHeight: "clamp(200px, 40vh, 300px)",
                 transition: "all 0.2s ease",
               }}
             />
@@ -361,6 +367,7 @@ function PasteViewSplit() {
           minWidth: 0,
           padding: "20px",
           height: "100%",
+          overflowY: "auto",
         }}
       >
         <div
@@ -368,7 +375,7 @@ function PasteViewSplit() {
             background: "rgba(255, 255, 255, 0.98)",
             borderRadius: 20,
             boxShadow: "0 10px 40px rgba(0,0,0,0.08)",
-            padding: 44,
+            padding: "clamp(20px, 5vw, 44px)",
             width: "100%",
             maxWidth: "800px",
             display: "flex",
@@ -485,38 +492,59 @@ function PasteViewSplit() {
           {selectedSnippet && (
             <div style={{ flex: 1, minHeight: 0, overflow: "auto" }}>
               <div style={{ position: "relative" }}>
-                <div style={{ position: 'relative' }}>
+                <div className="code-preview" style={{ position: "relative" }}>
                   <button
                     onClick={() => handleCopyCode(selectedSnippet.code)}
                     style={{
-                      position: 'absolute',
-                      top: '8px',
-                      right: '8px',
-                      padding: '6px 12px',
-                      background: 'white',
-                      border: '1px solid #e2e8f0',
-                      borderRadius: '6px',
-                      fontSize: '13px',
-                      cursor: 'pointer',
+                      position: "absolute",
+                      top: "8px",
+                      right: "8px",
+                      padding: "6px 12px",
+                      background: "white",
+                      border: "1px solid #e2e8f0",
+                      borderRadius: "6px",
+                      fontSize: "13px",
+                      cursor: "pointer",
                       zIndex: 1,
-                      boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
-                      transition: 'all 0.2s ease',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '6px',
+                      boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+                      transition: "all 0.2s ease",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px",
                     }}
                   >
                     {showCopied ? (
                       <>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <svg
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                        >
                           <polyline points="20 6 9 17 4 12"></polyline>
                         </svg>
                         Copied!
                       </>
                     ) : (
                       <>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <svg
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                        >
+                          <rect
+                            x="9"
+                            y="9"
+                            width="13"
+                            height="13"
+                            rx="2"
+                            ry="2"
+                          ></rect>
                           <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                         </svg>
                         Copy Code
@@ -529,12 +557,13 @@ function PasteViewSplit() {
                     customStyle={{
                       margin: 0,
                       borderRadius: 12,
-                      padding: "16px",
-                      fontSize: 15,
-                      minHeight: "300px",
-                      backgroundColor: '#ffffff',
-                      border: '1px solid #e2e8f0',
+                      padding: "clamp(12px, 2vw, 16px)",
+                      fontSize: "clamp(12px, 2vw, 15px)",
+                      backgroundColor: "#ffffff",
+                      border: "1px solid #e2e8f0",
+                      overflowX: "auto",
                     }}
+                    className="responsive-code"
                   >
                     {selectedSnippet.code}
                   </SyntaxHighlighter>
@@ -642,7 +671,7 @@ function ViewPaste({ id }) {
             background: "rgba(255, 255, 255, 0.98)",
             borderRadius: 20,
             boxShadow: "0 10px 40px rgba(0,0,0,0.08)",
-            padding: 44,
+            padding: "clamp(20px, 5vw, 44px)",
             width: "100%",
             maxWidth: "800px",
             display: "flex",
@@ -653,9 +682,9 @@ function ViewPaste({ id }) {
             style={{
               textAlign: "center",
               color: "#1a202c",
-              marginBottom: 32,
+              marginBottom: "clamp(20px, 4vw, 32px)",
               fontWeight: 700,
-              fontSize: 30,
+              fontSize: "clamp(20px, 4vw, 30px)",
               letterSpacing: "-0.5px",
             }}
           >
@@ -695,7 +724,10 @@ function ViewPaste({ id }) {
               }}
             />
 
-            <div style={{ display: "flex", gap: "12px", marginBottom: 24 }}>
+            <div
+              className="language-selector"
+              style={{ display: "flex", gap: "12px", marginBottom: 24 }}
+            >
               <div style={{ flex: 1 }}>
                 <label
                   style={{
@@ -781,6 +813,7 @@ function ViewPaste({ id }) {
               Code
             </label>
             <textarea
+              className="code-input"
               placeholder="Paste your code here"
               value={code}
               onChange={(e) => setCode(e.target.value)}
@@ -789,7 +822,7 @@ function ViewPaste({ id }) {
                 padding: "16px",
                 borderRadius: 12,
                 border: "1px solid #e2e8f0",
-                fontSize: 15,
+                fontSize: "clamp(14px, 2vw, 15px)",
                 fontFamily: "Fira Mono, monospace",
                 marginBottom: 28,
                 background: "#f8fafc",
@@ -797,7 +830,7 @@ function ViewPaste({ id }) {
                 outline: "none",
                 boxSizing: "border-box",
                 flex: 1,
-                minHeight: "300px",
+                minHeight: "clamp(200px, 40vh, 300px)",
                 transition: "all 0.2s ease",
               }}
             />
@@ -860,6 +893,7 @@ function ViewPaste({ id }) {
           minWidth: 0,
           padding: "20px",
           height: "100%",
+          overflowY: "auto",
         }}
       >
         <div
@@ -867,7 +901,7 @@ function ViewPaste({ id }) {
             background: "rgba(255, 255, 255, 0.98)",
             borderRadius: 20,
             boxShadow: "0 10px 40px rgba(0,0,0,0.08)",
-            padding: 44,
+            padding: "clamp(20px, 5vw, 44px)",
             width: "100%",
             maxWidth: "800px",
             display: "flex",
@@ -984,38 +1018,59 @@ function ViewPaste({ id }) {
           {selectedSnippet && (
             <div style={{ flex: 1, minHeight: 0, overflow: "auto" }}>
               <div style={{ position: "relative" }}>
-                <div style={{ position: 'relative' }}>
+                <div className="code-preview" style={{ position: "relative" }}>
                   <button
                     onClick={() => handleCopyCode(selectedSnippet.code)}
                     style={{
-                      position: 'absolute',
-                      top: '8px',
-                      right: '8px',
-                      padding: '6px 12px',
-                      background: 'white',
-                      border: '1px solid #e2e8f0',
-                      borderRadius: '6px',
-                      fontSize: '13px',
-                      cursor: 'pointer',
+                      position: "absolute",
+                      top: "8px",
+                      right: "8px",
+                      padding: "6px 12px",
+                      background: "white",
+                      border: "1px solid #e2e8f0",
+                      borderRadius: "6px",
+                      fontSize: "13px",
+                      cursor: "pointer",
                       zIndex: 1,
-                      boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
-                      transition: 'all 0.2s ease',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '6px',
+                      boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+                      transition: "all 0.2s ease",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px",
                     }}
                   >
                     {showCopied ? (
                       <>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <svg
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                        >
                           <polyline points="20 6 9 17 4 12"></polyline>
                         </svg>
                         Copied!
                       </>
                     ) : (
                       <>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <svg
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                        >
+                          <rect
+                            x="9"
+                            y="9"
+                            width="13"
+                            height="13"
+                            rx="2"
+                            ry="2"
+                          ></rect>
                           <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                         </svg>
                         Copy Code
@@ -1028,12 +1083,13 @@ function ViewPaste({ id }) {
                     customStyle={{
                       margin: 0,
                       borderRadius: 12,
-                      padding: "16px",
-                      fontSize: 15,
-                      minHeight: "300px",
-                      backgroundColor: '#ffffff',
-                      border: '1px solid #e2e8f0',
+                      padding: "clamp(12px, 2vw, 16px)",
+                      fontSize: "clamp(12px, 2vw, 15px)",
+                      backgroundColor: "#ffffff",
+                      border: "1px solid #e2e8f0",
+                      overflowX: "auto",
                     }}
+                    className="responsive-code"
                   >
                     {selectedSnippet.code}
                   </SyntaxHighlighter>
@@ -1070,8 +1126,8 @@ function App() {
 
   // Check if URL has admin parameter
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get("admin") === "true") {
+    const path = window.location.pathname;
+    if (path === "/admin") {
       setIsAdmin(true);
     }
   }, []);
