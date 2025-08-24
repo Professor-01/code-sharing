@@ -579,7 +579,7 @@ function ViewPaste({ id }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const res = await fetch("http://localhost:3001/api/paste", {
+    const res = await fetch(`${API_URL}/api/paste`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, code }),
@@ -599,7 +599,7 @@ function ViewPaste({ id }) {
       setViewError("Please enter both link ID and name.");
       return;
     }
-    const res = await fetch(`http://localhost:3001/api/view/${viewId}`, {
+    const res = await fetch(`${API_URL}/api/view/${viewId}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name: viewName }),

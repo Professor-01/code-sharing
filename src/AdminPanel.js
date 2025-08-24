@@ -61,7 +61,7 @@ export default function AdminPanel() {
     e.preventDefault();
     setLoginError("");
     try {
-      const res = await fetch("http://localhost:3001/api/admin", {
+      const res = await fetch(`${API_URL}/api/admin`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ adminKey: tempKey }),

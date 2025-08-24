@@ -1,6 +1,14 @@
+require('dotenv').config();
 const express = require("express");
 const cors = require("cors");
 const app = express();
+
+// Configure CORS
+const corsOptions = {
+  origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+  methods: ['GET', 'POST'],
+  credentials: true,
+};
 
 // Store codes in memory with advanced structure
 const codeStore = new Map();
@@ -8,7 +16,7 @@ const codeStore = new Map();
 // Configure express for large payloads
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
-app.use(cors());
+app.use(cors(corsOptions));
 
 // Utility function to clean expired codes
 function cleanExpiredCodes() {
@@ -137,7 +145,7 @@ app.post("/api/admin", (req, res) => {
   const { adminKey } = req.body;
 
   // Simple admin key check - in production, use proper authentication
-  if (adminKey !== "your-secure-admin-key") {
+  if (adminKey !== process.env.ADMIN_KEY) {
     return res.status(401).json({ error: "Unauthorized" });
   }
 
@@ -173,7 +181,7 @@ app.post("/api/admin", (req, res) => {
   });
 });
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
