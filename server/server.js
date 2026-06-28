@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const app = express();
@@ -5,8 +6,17 @@ const app = express();
 // Admin key should be provided via environment variable for security
 const ADMIN_KEY = process.env.ADMIN_KEY || "your-secure-admin-key";
 if (!process.env.ADMIN_KEY) {
-  console.warn("Warning: ADMIN_KEY is not set. Using default insecure key. Set ADMIN_KEY in environment for production.");
+  console.warn(
+    "Warning: ADMIN_KEY is not set. Using default insecure key. Set ADMIN_KEY in environment for production."
+  );
 }
+
+// Configure CORS
+const corsOptions = {
+  origin: process.env.CORS_ORIGIN || "http://localhost:3000",
+  methods: ["GET", "POST"],
+  credentials: true,
+};
 
 // Store codes in memory with advanced structure
 const codeStore = new Map();
@@ -14,7 +24,7 @@ const codeStore = new Map();
 // Configure express for large payloads
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
-app.use(cors());
+app.use(cors(corsOptions));
 
 // Utility function to clean expired codes
 function cleanExpiredCodes() {
@@ -179,7 +189,7 @@ app.post("/api/admin", (req, res) => {
   });
 });
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
