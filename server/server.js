@@ -12,9 +12,19 @@ if (!process.env.ADMIN_KEY) {
 }
 
 // Configure CORS
+// Support comma-separated origin list in CORS_ORIGIN env var (e.g. "https://a.com,https://b.com")
+const rawCors = process.env.CORS_ORIGIN || "http://localhost:3000";
+const allowedOrigins = rawCors.split(",").map((s) => s.trim()).filter(Boolean);
+
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN || "http://localhost:3000",
-  methods: ["GET", "POST"],
+  origin: function (origin, callback) {
+    // Allow non-browser requests (curl, Postman) where origin is undefined
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes("*")) return callback(null, true);
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    return callback(new Error("CORS policy: origin not allowed"));
+  },
+  methods: ["GET", "POST", "OPTIONS"],
   credentials: true,
 };
 
