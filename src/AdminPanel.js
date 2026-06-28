@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
-import { githubGist } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { githubGist } from "react-syntax-highlighter/dist/cjs/styles/hljs";
 
 const API_URL = process.env.REACT_APP_API_URL;
 

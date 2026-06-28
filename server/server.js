@@ -2,6 +2,12 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 
+// Admin key should be provided via environment variable for security
+const ADMIN_KEY = process.env.ADMIN_KEY || "your-secure-admin-key";
+if (!process.env.ADMIN_KEY) {
+  console.warn("Warning: ADMIN_KEY is not set. Using default insecure key. Set ADMIN_KEY in environment for production.");
+}
+
 // Store codes in memory with advanced structure
 const codeStore = new Map();
 
@@ -137,7 +143,7 @@ app.post("/api/admin", (req, res) => {
   const { adminKey } = req.body;
 
   // Simple admin key check - in production, use proper authentication
-  if (adminKey !== "your-secure-admin-key") {
+  if (!ADMIN_KEY || adminKey !== ADMIN_KEY) {
     return res.status(401).json({ error: "Unauthorized" });
   }
 

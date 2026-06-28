@@ -1,3 +1,25 @@
+# Node modules
+node_modules/
+
+# Build output
+build/
+
+# Environment
+.env
+.env.*
+
+# Logs
+npm-debug.log*
+
+# Editor directories and files
+.vscode/
+.idea/
+.DS_Store
+
+# Certificates and keys
+*.pem
+*.key
+*.crt
 # dependencies
 /node_modules
 /.pnp

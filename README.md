@@ -47,6 +47,16 @@ Create a `.env` file in the root of the frontend project with:
 REACT_APP_API_URL=your_backend_url
 ```
 
+### Backend
+
+Create a `.env` file (or set env vars) for the backend with:
+
+```
+ADMIN_KEY=your_admin_key_here
+```
+
+Do NOT commit `.env` files to source control. Add them to `.gitignore`.
+
 ## Technologies Used
 
 - React

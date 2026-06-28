@@ -4,12 +4,12 @@ import {
   docco, 
   atomOneDark,
   githubGist
-} from "react-syntax-highlighter/dist/esm/styles/hljs";
+} from "react-syntax-highlighter/dist/cjs/styles/hljs";
 import "./index.css";
 
 import AdminPanel from './AdminPanel';
 
-const API_URL = process.env.REACT_APP_API_URL;
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:3001";
 
 function PasteViewSplit() {
   // PastePage state
@@ -18,6 +18,7 @@ function PasteViewSplit() {
   const [language, setLanguage] = useState("plaintext");
   const [expiresIn, setExpiresIn] = useState(24 * 60 * 60 * 1000); // 24 hours default
   const [sharedCode, setSharedCode] = useState(null);
+  const [pasteError, setPasteError] = useState(null);
 
   // ViewPaste state
   const [viewName, setViewName] = useState("");
@@ -54,15 +55,33 @@ function PasteViewSplit() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const res = await fetch(`${API_URL}/api/paste`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, code, language, expiresIn }),
-    });
-    const data = await res.json();
-    setSharedCode(true);
-    setName("");
-    setCode("");
+    setPasteError(null);
+
+    try {
+      const res = await fetch(`${API_URL}/api/paste`, {
+        method: "POST",
+        mode: "cors",
+        cache: "no-cache",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, code, language, expiresIn }),
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        const statusHint = res.status === 404 ? " (backend route not found)" : "";
+        throw new Error(
+          errorData.error || `Unable to save paste. Try again.${statusHint}`
+        );
+      }
+
+      await res.json();
+      setSharedCode(true);
+      setName("");
+      setCode("");
+    } catch (error) {
+      console.error("Paste submit failed:", error);
+      setPasteError(error.message || "Failed to submit paste.");
+    }
   }
 
   async function handleView() {
@@ -74,21 +93,27 @@ function PasteViewSplit() {
       setViewError("Please enter a name.");
       return;
     }
-    
-    const res = await fetch(`${API_URL}/api/view`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: viewName }),
-    });
-    
-    if (res.ok) {
+
+    try {
+      const res = await fetch(`${API_URL}/api/view`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: viewName }),
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || "No shared code found for this name.");
+      }
+
       const data = await res.json();
       setViewSnippets(data.snippets);
       if (data.snippets.length > 0) {
         setSelectedSnippet(data.snippets[0]);
       }
-    } else {
-      setViewError("No shared code found for this name.");
+    } catch (error) {
+      console.error("View fetch failed:", error);
+      setViewError(error.message || "Failed to load shared code.");
     }
   }
 

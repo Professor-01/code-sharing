@@ -17,4 +17,130 @@ body {
   box-sizing: border-box;
   overflow-x: hidden;
 }
-/* Empty index.css to resolve import error */
+:root{
+  --bg-0: #f6f9fc;
+  --bg-1: #eef2f7;
+  --card-bg: #ffffff;
+  --muted: #4a5568;
+  --primary-0: #4c51bf;
+  --primary-1: #4299e1;
+  --border: #e2e8f0;
+  --glass: rgba(255,255,255,0.9);
+  --radius-lg: 18px;
+  --radius-md: 12px;
+  --shadow-1: 0 10px 40px rgba(2,6,23,0.06);
+}
+
+/* Layout */
+.app-container{
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  box-sizing: border-box;
+  background: linear-gradient(120deg, var(--bg-0) 0%, var(--bg-1) 100%);
+}
+
+.panel{
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+}
+
+.card{
+  background: var(--glass);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-1);
+  padding: 36px;
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-header{
+  text-align: center;
+  color: #0f1724;
+  margin-bottom: 28px;
+  font-weight: 700;
+  font-size: 28px;
+  letter-spacing: -0.5px;
+}
+
+/* Form controls */
+label{font-weight:600;color:var(--muted);font-size:15px;display:block;margin-bottom:6px}
+.input, .select, .textarea{
+  width:100%;
+  padding:12px 16px;
+  border-radius:var(--radius-md);
+  border:1px solid var(--border);
+  font-size:15px;
+  outline:none;
+  box-sizing:border-box;
+  transition:all 0.16s ease;
+  background:var(--card-bg);
+}
+.input:focus, .select:focus, .textarea:focus{box-shadow:0 6px 18px rgba(66,153,225,0.12);border-color:var(--primary-1)}
+.two-col{display:flex;gap:12px;margin-bottom:24px}
+.two-col > div{flex:1}
+.textarea{min-height:220px;font-family: 'Fira Mono', monospace;resize:none;padding:16px}
+
+/* Buttons */
+.btn{
+  border: none;
+  padding: 12px 18px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight:600;
+  font-size:15px;
+  transition:all 0.18s ease;
+}
+.btn-primary{
+  background: linear-gradient(135deg,var(--primary-0) 0%,var(--primary-1) 100%);
+  color: white;
+  box-shadow: 0 8px 24px rgba(76,81,191,0.12);
+}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted)}
+.snippet-btn{padding:8px 14px;border-radius:10px;border:1px solid var(--border);background:white;color:var(--muted);cursor:pointer}
+.snippet-btn.active{background:var(--primary-0);color:white;border-color:transparent}
+
+/* Code view */
+.code-wrap{position:relative}
+.copy-btn{position:absolute;top:10px;right:12px;padding:8px 10px;border-radius:8px;background:var(--card-bg);border:1px solid var(--border);cursor:pointer;z-index:2}
+
+/* Responsive */
+@media (max-width: 920px){
+  .app-container{flex-direction:column;padding:12px}
+  .card{padding:20px}
+}
+
+/* Small helpers */
+.muted{color:var(--muted)}
+.success-pill{margin-top:20px;background:linear-gradient(90deg,#f0f9ff,#eef6ff);padding:12px;border-radius:10px;border:1px solid var(--border);color:#0f1724}
+
+/* Improve syntax highlighter fonts */
+.react-syntax-highlighter{border-radius:12px !important}
+
+/* End of premium styles */
+
+/* Global element styles to enhance existing inline markup */
+input, select, textarea {
+  font-family: inherit;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  padding: 12px 16px;
+  background: var(--card-bg);
+  font-size: 15px;
+  outline: none;
+}
+input:focus, select:focus, textarea:focus{box-shadow:0 8px 24px rgba(66,153,225,0.12);border-color:var(--primary-1)}
+button{font-family:inherit}
+
+/* Make the layout responsive for small screens when inline styles are present */
+@media (max-width:920px){
+  body{padding:8px}
+  .card{padding:20px}
+}
